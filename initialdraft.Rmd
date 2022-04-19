@@ -44,7 +44,7 @@ healthy_data_dollars <- healthy_data %>%
          gym_cost = `Cost of a monthly gym membership(City)`*1.3)
 ```
 
-
+Cat's graph:
 ```{r, r.height = 20, r.width = 15, fig.alt= "This dot plot compares the level of happiness to the sunshine hours in 43 different locations from the Healthy Lifestyle Cities Report 2021. The dots are all assigned a color based on location, and plotted at each discrete point. There appears to be no strong correlation between isolating the sunshine hours and comparing them to the happiness level. More factors combine to make up overall happiness."}
 healthy_lifestyle_data_cat <- healthy_data_dollars[-c(20),]
 
@@ -72,7 +72,7 @@ healthy_lifestyle_data_cat %>%
 
 ```
 
-Which cities are the sunniest and least sunny?
+Joce's graph Which cities are the sunniest and least sunny?
 ```{r, fig.alt = "Graph of the top 10 and bottom 10 cities by annual sunshine hours.The cities are mapped on the y-axis while the sunshine hours is mapped on the x-axis. Cairo, Tel Aviv, and Los Angeles were the top three trending just over 3000 annual sunshine hours while Brussels, Dublin, and Taipei were the bottom three with around 1500 annual sunshine hours."}
 top_10 <- healthy_data %>% 
   arrange(desc(`Sunshine hours(City)`)) %>% 
@@ -97,6 +97,8 @@ bottom_10 <- healthy_data %>%
 
 grid.arrange(top_10, bottom_10, nrow=2)
 ```
+
+Ana's graph
 ```{r, fig.alt= "Scatterplot showing the relationship between the precentage of Obesity in each city's respective country and the number of take out places in that city." }
 healthy_lifestyle_city_2021 %>% 
   head(n =10) %>% 
