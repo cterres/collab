@@ -97,4 +97,20 @@ bottom_10 <- healthy_data %>%
 
 grid.arrange(top_10, bottom_10, nrow=2)
 ```
-
+```{r, fig.alt= "Scatterplot showing the relationship between the precentage of Obesity in each city's respective country and the number of take out places in that city." }
+healthy_lifestyle_city_2021 %>% 
+  head(n =10) %>% 
+  select(City, `Obesity levels(Country)`, `Number of take out places(City)`) %>% 
+  ggplot(aes(x = `Obesity levels(Country)`, y = `Number of take out places(City)`, color = City))+
+  geom_point(aes(color = City), size = 3)+
+  labs(title= "Obesity Percentage Variation with Increasing Number of Take Out Places", x = "Country-wide Obesity Levels", y = "Number of Take Out Places in Each City")+
+  scale_color_brewer(palette="Paired"
+                     )+
+  theme(
+  panel.background = element_rect(fill = "steelblue4",
+                                colour = "steelblue4",
+                                size = 0.5,
+                                ),
+  panel.border = element_blank())
+  
+```
