@@ -42,3 +42,30 @@ healthy_data_dollars <- healthy_data %>%
          gym_cost = `Cost of a monthly gym membership(City)`*1.3)
 ```
 
+
+Which cities are the sunniest and least sunny?
+```{r, fig.alt = "Graph of the top 10 and bottom 10 cities by annual sunshine hours.The cities are mapped on the y-axis while the sunshine hours is mapped on the x-axis. Cairo, Tel Aviv, and Los Angeles were the top three trending just over 3000 annual sunshine hours while Brussels, Dublin, and Taipei were the bottom three with around 1500 annual sunshine hours."}
+top_10 <- healthy_data %>% 
+  arrange(desc(`Sunshine hours(City)`)) %>% 
+  slice(1:10) %>% 
+  ggplot(aes(y = fct_reorder(City,`Sunshine hours(City)`), x = `Sunshine hours(City)`)) +
+  geom_col(fill = "khaki") +
+  labs(title = "Top 10 and Bottom 10 Cities by Annual Sunshine Hours",
+       y = "",
+       x = "") +
+  dark_theme_minimal()
+
+bottom_10 <- healthy_data %>% 
+  arrange(`Sunshine hours(City)`) %>% 
+  slice(1:10) %>% 
+  ggplot(aes(y = fct_reorder(City,`Sunshine hours(City)`), x = `Sunshine hours(City)`)) +
+  geom_col(fill = "khaki") +
+  xlim(0,3540) +
+  labs(y = "",
+       x = "",
+       caption = "Data from UK Healthy Lifestyle Cities Report 2021, Graph by Jocelyn Radke") +
+  dark_theme_minimal()
+
+grid.arrange(top_10, bottom_10, nrow=2)
+```
+
