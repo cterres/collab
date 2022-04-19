@@ -13,3 +13,27 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)
 ```
+
+```{r}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(gridExtra)
+library(tidyverse)
+```
+
+```{r}
+healthy_data <- read_csv("healthy_lifestyle_city_2021.csv", 
+    col_types = cols(Rank = col_number(), 
+        `Sunshine hours(City)` = col_number(), 
+        `Cost of a bottle of water(City)` = col_number(), 
+        `Obesity levels(Country)` = col_number(), 
+        `Life expectancy(years) (Country)` = col_number(), 
+        `Pollution(Index score) (City)` = col_number(), 
+        `Annual avg. hours worked` = col_number(), 
+        `Happiness levels(Country)` = col_number(), 
+        `Outdoor activities(City)` = col_number(),
+        `Number of take out places(City)` = col_number(), 
+        `Cost of a monthly gym membership(City)` = col_number()))
+```
+
