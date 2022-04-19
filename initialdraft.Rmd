@@ -35,5 +35,10 @@ healthy_data <- read_csv("healthy_lifestyle_city_2021.csv",
         `Outdoor activities(City)` = col_number(),
         `Number of take out places(City)` = col_number(), 
         `Cost of a monthly gym membership(City)` = col_number()))
+
+# converting to dollars
+healthy_data_dollars <- healthy_data %>% 
+  mutate(water_bottle_cost = `Cost of a bottle of water(City)`*1.3,
+         gym_cost = `Cost of a monthly gym membership(City)`*1.3)
 ```
 
