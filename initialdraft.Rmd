@@ -219,3 +219,27 @@ healthy_data %>%
   
 ```
 
+
+```{r, fig.alt= Interactive plot showing the relationship between life expectancy in years and the obesity percentage of each city's respective country}
+obesity_life <-
+healthy_data_dollars %>% 
+  select(`City`, `Life expectancy(years) (Country)`, `Obesity levels(Country)`) %>% 
+  arrange(`Obesity levels(Country)`) %>% 
+  ggplot(aes(x = `Obesity levels(Country)`, y = `Life expectancy(years) (Country)`, color = `City`))+
+  geom_point()+
+  labs(title = "Life Expectancy by Country and its Relationship to Obesity Levels ")+
+  theme(legend.position = "none",
+        panel.background = element_rect(fill = "lightblue",
+                                colour = "gray",
+                                size = 0.5,
+                                ))
+  
+  ggplotly(obesity_life,
+         tooltip = c("text", 
+                     "x",
+                     "City"))
+  
+  
+```
+
+>From the graph, we can appreciate a few patterns: There is a slight grouping of cities towards the lower Obesity levels (<10%), that relates to a mid-to-high Life Expectancy. Another cluster is observable in the 20-30% obesity range, with a majority of those cities showing a high life expectancy. It is interesting to note that most of these cities are European, as opposed to other cities at a similar Obesity level, which show lower Life Expectancy and are in the American continent. Finally, we can also observe a last group in the (>30%) Obesity levels, which show a small variation in Life Expectancy, with Washington DC showing the highest Life Expectacy in the group.
