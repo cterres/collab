@@ -76,7 +76,7 @@ ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `
 
 #Starting to mess with hours worked but realized that missing data is going to be a problem
 ```{r}
-ggplot(healthy_data_2, aes(y = fct_reorder(City, `Annual avg. hours worked`), x = `Annual avg. hours worked`, color = `Happiness levels(Country)`)) +
+ggplot(healthy_data_2, aes(y = fct_reorder(City, `Hours Worked`), x = `Hours Worked`, color = `Happiness levels(Country)`)) +
   geom_point() +
   labs(title = "",
        caption = "Data from: ADD LATER",
