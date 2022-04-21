@@ -88,7 +88,10 @@ ggplot(healthy_data_2, aes(y = fct_reorder(City, `Hours Worked`), x = `Hours Wor
   theme_classic() 
 ```
 
-Cat's graph:
+Cat's graph(s):
+
+We chose three variables that we think are important contributing factors to overall happiness, influenced of course by where we are and salient factors we feel attuned to. Our variables, life expectancy, sunshine hours, and hours worked, are compared against overall happiness for each place to see if there is a correlation between more or less of each variable. We are also keeping in mind intangible factors such as state of mind and the impacts of cultural attitudes. 
+
 ```{r, r.height = 20, r.width = 15, fig.alt= "This dot plot compares the level of happiness to the sunshine hours in 43 different locations from the Healthy Lifestyle Cities Report 2021. The dots are all assigned a color based on location, and plotted at each discrete point. There appears to be no strong correlation between isolating the sunshine hours and comparing them to the happiness level. More factors combine to make up overall happiness."}
 healthy_lifestyle_data_cat <- healthy_data_dollars[-c(20),]
 
@@ -120,6 +123,52 @@ ggplotly(healthy_lifestyle_data_cat2,
          tooltip = c("text", 
                      "x",
                      "(City)"))
+```
+
+Life expectancy vs. Happiness (factor in city)
+Does happiness affect life expectancy?
+
+```{r, fig.alt= "For this graph, the cities have been placed into bins based on the happiness level and the range they fall into. For example, a country with a happiness level of 4.5 would be placed within the box plot above the "4-5" on the x axis. They are then plotted using upper and lower quartiles to show the distribution of life expectancies."}
+bin_size <- 1
+healthy_data_dollars %>% 
+  select("City" = `City`, "Happiness Level" = `Happiness levels(Country)`, "Life Expectancy" = `Life expectancy(years) (Country)`) %>% 
+  arrange(desc(`Life Expectancy`)) %>% 
+ 
+  mutate(bin_dist = paste(as.character(as.integer(`Happiness Level`)),as.character(as.integer(`Happiness Level`+1)), sep = "-")) %>%  
+  ggplot() +
+  geom_boxplot(aes(x = factor(bin_dist), 
+         y = `Life Expectancy`,
+         outlier.color = NULL,
+         fill = bin_dist
+         )) +
+  labs(title = "Does reported greater happiness have a positive effect on life expectancy?",
+       x = "Happiness Level",
+       y = "Life Expectancy",
+       fill = "") +
+  
+  
+  guides(y = guide_axis(angle = 45))
+  
+  
+```
+
+Hours Worked vs. Happiness (factor in city)
+Is there a correlation between happiness and hours worked?
+#This one is still a work in progress
+```{r}
+##waiting on revised hours worked data
+healthy_data_dollars %>% 
+  select(`City`, "Happiness Level" = `Happiness levels(Country)`, "Average Annual Hours Worked" = `Annual avg. hours worked`) %>% 
+  arrange(desc(`Average Annual Hours Worked`)) %>% 
+  
+  mutate(bin_dist = paste(as.character(as.integer(`Happiness Level`)),as.character(as.integer(`Happiness Level`+1)), sep = "-")) %>% 
+  
+  ggplot(aes(x = factor(bin_dist),
+             y = `Average Annual Hours Worked`
+             )) +
+  geom_col()
+
+  
 ```
 
 
