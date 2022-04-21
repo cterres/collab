@@ -48,6 +48,8 @@ healthy_data_dollars <- healthy_data %>%
 
 > Because economic performance is a common standard for measuring the success of a given country, we chose to investigate if there is a correlation between gross domestic product (GDP), which is a measure of the total volume of goods and services produced within in country in a given year, and happiness levels as calculated by the **survey**. We used population data to calculate GDP per capita (thereafter, GDPPC) so as to control for differences in population between countries. We believe that GDPPC provides a helpful, though imperfect measure of the standard of living within a country. GDPPC operates with the assumption that every individual within a country gets an equal slice of the GDP pie, which is unrealistic, however, this is an assumption we will make for the purpose of this analysis. We see that countries with higher GDPPC tend to correlate with higher happiness levels than countries with lower GDPPC. We wondered if countries with a higher GDPPC would be more unhappy reflecting that they may work longer hours in order to have such a high level of production. It is possible that rather than hours worked, GDP reflects differences in technology, production processes, management, or human capital.    
 
+[GDP data source](https://worldpopulationreview.com/countries/countries-by-gdp)
+
 ```{r}
 country_GDP <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQL_6se7aBLQSP92RgP5DkvQ_quTyzsTxskf9ZFpvE_5ifMS5whQ1Lr0JRNMtd1ZGAaVXlEEMECPMHr/pub?output=csv", 
     col_types = cols(GDPM = col_number(), 
