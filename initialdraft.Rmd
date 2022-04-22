@@ -75,6 +75,7 @@ ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `
 ```
 
 #Starting to mess with hours worked but realized that missing data is going to be a problem
+[new hours worked data (Penn)](https://worldpopulationreview.com/country-rankings/average-work-week-by-country)
 ```{r}
 ggplot(healthy_data_2, aes(y = fct_reorder(City, `Hours Worked`), x = `Hours Worked`, color = `Happiness levels(Country)`)) +
   geom_point() +
