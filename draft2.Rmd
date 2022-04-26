@@ -25,6 +25,8 @@ library(lubridate)
 library(ggthemes)
 library(plotly)
 library(ggdark)
+library(maps)
+library(ggmap)
 ```
 
 ## Introduction and Background
@@ -66,13 +68,13 @@ healthy_data_dollars <- healthy_data %>%
 
 
 ```{r}
-country_GDP <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQL_6se7aBLQSP92RgP5DkvQ_quTyzsTxskf9ZFpvE_5ifMS5whQ1Lr0JRNMtd1ZGAaVXlEEMECPMHr/pub?output=csv", 
+supplemental_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQL_6se7aBLQSP92RgP5DkvQ_quTyzsTxskf9ZFpvE_5ifMS5whQ1Lr0JRNMtd1ZGAaVXlEEMECPMHr/pub?output=csv", 
     col_types = cols(GDPM = col_number(), 
         GDP = col_number(), pop = col_number(), 
         GDPPC = col_number()))
 
 healthy_data_2 <- healthy_data_dollars %>% 
-  left_join(country_GDP,
+  left_join(supplemental_data,
             by = c("City" = "city"))
 
 options(scipen=999)
@@ -89,19 +91,25 @@ ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `
   theme_classic() 
 ```
 
-#Happiness level by hours worked
 ```{r}
-ggplot(healthy_data_2, aes(y = fct_reorder(City, `Hours Worked`), x = `Hours Worked`, color = `Happiness levels(Country)`)) +
-  geom_point() +
-  labs(title = "",
-       caption = "Data from: ADD LATER",
-       x = "",
-       y = "",
-       color = "Happiness Level 
-       (1-10 scale)") +
-  theme(plot.title = element_text(hjust = 1)) +
-  theme_classic() 
+healthy_data_2 %>% 
+  filter(country == "Canada")
+
+# Get the map information
+world <- get_stamenmap(
+    bbox = c(left = -180, bottom = -57, right = 179, top = 82.1), 
+    maptype = "terrain",
+    zoom = 2)
+
+# Plot the points on the map
+ggmap(world) + # creates the map "background"
+  geom_point(data = healthy_data_2 %>% 
+  filter(country == "Canada"), 
+             aes(x = Longitude, y = Latitude), 
+             size = 0.5, color = "red") +
+  theme_map()
 ```
+
 
 Cat's graph(s):
 
