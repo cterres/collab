@@ -176,7 +176,7 @@ Hours Worked vs. Happiness (factor in city)
 Is there a correlation between happiness and hours worked?
 
 
-```{r}
+```{r, fig.alt= "This graph displays various cities with their own color coded dot based on happiness level (x axis) and weekly hours worked (y axis). There is a loose correlation between greater happiness and fewer weeky work hours. The dots are able to be scrolled over with the cursor, displaying exact happiness level, exact work hours, and city."}
 healthy_data_dot <- healthy_data_2 [-c(23),]
 
 Healthy <- healthy_data_dot %>% 
