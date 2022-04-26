@@ -211,3 +211,44 @@ ggplotly(Healthy,
                      "x",
                      "City"))
 ```
+
+
+
+
+
+#GDPPC vs. Hours Worked (Can we observe a relationship between the GDPC of each contry and the average amount of hours people work per week?) Can the observable patterns tell us something about the contries with low GDPC and a higher number of working hours? How can we relate this to happiness?
+
+```{r}
+country_GDP <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQL_6se7aBLQSP92RgP5DkvQ_quTyzsTxskf9ZFpvE_5ifMS5whQ1Lr0JRNMtd1ZGAaVXlEEMECPMHr/pub?output=csv", 
+    col_types = cols(GDPM = col_number(), 
+        GDP = col_number(), pop = col_number(), 
+        GDPPC = col_number()))
+
+
+healthy_data_2 <- healthy_data_dollars %>% 
+  left_join(country_GDP,
+            by = c("City" = "city"))
+
+options(scipen=999)
+
+GDPP_hours <- healthy_data_2 %>% 
+ggplot( aes(y = GDPPC, x = `Hours Worked`, color = `City`)) +
+  geom_point() +
+  labs(title = "Gross Domestic Product per Capita by Country and Average Weekly Hours Worked",
+       caption = "Data from: ADD LATER",
+       y = "GDP per capita (USD)",
+       x = "Hours Worked (Weekly)",
+       color = "") +
+  theme(legend.position = "none",
+        panel.background = element_rect(fill = "lightblue",
+                                colour = "gray",
+                                size = 0.5,
+                                ),
+        plot.title = element_text(size = 0.05))
+
+
+ggplotly(GDPP_hours,
+         tooltip = c("text", 
+                     "x",
+                     "City"))
+```
