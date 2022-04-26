@@ -32,6 +32,7 @@ Game plan
 - Ana working on explanation for graph you made- development 
 - Ana can work on data collection and different data sources
 - Cat work on description for graph, write skeleton for analysis
+- adding line
 
 
 
