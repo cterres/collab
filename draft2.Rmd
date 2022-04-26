@@ -92,22 +92,21 @@ ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `
 ```
 
 ```{r}
-healthy_data_2 %>% 
-  filter(country == "Canada")
-
 # Get the map information
 world <- get_stamenmap(
     bbox = c(left = -180, bottom = -57, right = 179, top = 82.1), 
-    maptype = "terrain",
+    maptype = "toner-lite",
     zoom = 2)
 
 # Plot the points on the map
-ggmap(world) + # creates the map "background"
-  geom_point(data = healthy_data_2 %>% 
-  filter(country == "Canada"), 
+map <- ggmap(world) + # creates the map "background"
+  geom_point(data = healthy_data_2, 
              aes(x = Longitude, y = Latitude), 
              size = 0.5, color = "red") +
   theme_map()
+
+ggplotly(map,
+         tooltip = c("text", "City"))
 ```
 
 
