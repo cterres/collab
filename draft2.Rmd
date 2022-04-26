@@ -175,20 +175,40 @@ healthy_data_dollars %>%
 
 Hours Worked vs. Happiness (factor in city)
 Is there a correlation between happiness and hours worked?
-#This one is still a work in progress
-```{r}
-##waiting on revised hours worked data
-healthy_data_dollars %>% 
-  select(`City`, "Happiness Level" = `Happiness levels(Country)`, "Average Annual Hours Worked" = `Annual avg. hours worked`) %>% 
-  arrange(desc(`Average Annual Hours Worked`)) %>% 
-  
-  mutate(bin_dist = paste(as.character(as.integer(`Happiness Level`)),as.character(as.integer(`Happiness Level`+1)), sep = "-")) %>% 
-  
-  ggplot(aes(x = factor(bin_dist),
-             y = `Average Annual Hours Worked`
-             )) +
-  geom_col()
 
+
+```{r}
+healthy_data_dot <- healthy_data_2 [-c(23),]
+
+Healthy <- healthy_data_dot %>% 
+  select(`City`, "Happiness Level" = `Happiness levels(Country)`, "Average Weekly Hours Worked" = `Hours Worked`) %>% 
+  mutate(`Avg. Weekly Hours Worked` = factor(`Average Weekly Hours Worked`)) %>% 
+  
+  #mutate(bin_dist = paste(as.character(as.integer(`Happiness Level`)),as.character(as.integer(`Happiness Level`+1)), sep = "-")) %>% 
+  
+ ggplot(aes(x = `Happiness Level`, 
+             y = `Avg. Weekly Hours Worked`, 
+             color = `City`)) +
+  geom_point() +
+  scale_y_discrete(breaks = c(26.6, 30.6, 33.2, 38.8, 42.1))+
+  
+  labs(title = "Is there a correlation between weekly work hours and happiness levels?",
+       x = "Happiness Level",
+       y = "",
+       caption = "Graph By Cat Terres; data sourced from Kaggle, 
+       'Healthy Lifestyle Cities Report 2021'",
+       color = "") +
+  
+  theme_foundation() +
+  theme(legend.title=element_blank())+
+  theme(legend.background = element_blank()) 
   
 ```
 
+```{r}
+ggplotly(Healthy,
+         tooltip = c("text",
+                     "y",
+                     "x",
+                     "City"))
+```
