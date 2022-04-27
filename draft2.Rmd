@@ -232,12 +232,12 @@ healthy_data_2 <- healthy_data_dollars %>%
 options(scipen=999)
 
 GDPP_hours <- healthy_data_2 %>% 
-ggplot( aes(y = GDPPC, x = `Hours Worked`, color = `City`)) +
+ggplot( aes(x = GDPPC, y = `Hours Worked`, color = `City`)) +
   geom_point() +
   labs(title = "Gross Domestic Product per Capita by Country and Average Weekly Hours Worked",
        caption = "Data from: ADD LATER",
-       y = "GDP per capita (USD)",
-       x = "Hours Worked (Weekly)",
+       x = "GDP per capita (USD)",
+       y = "Hours Worked (Weekly)",
        color = "") +
   theme(legend.position = "none",
         panel.background = element_rect(fill = "lightblue",
