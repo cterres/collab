@@ -91,7 +91,7 @@ leaflet(data = healthy_data_2) %>%
   )
 ```
 
-> Because economic performance is a common standard for measuring the success of a given country, we chose to investigate if there is a correlation between gross domestic product (GDP), which is a measure of the total volume of goods and services produced within in country in a given year, and happiness levels as calculated by the **survey**. We see that countries with higher GDPPC tend to correlate with higher happiness levels than countries with lower GDPPC. We wondered if countries with a higher GDPPC would be more unhappy reflecting that they may work longer hours in order to have such a high level of production. It is possible that rather than hours worked, GDP reflects differences in technology, production processes, management, or human capital.    
+> We chose to investigate if there is a correlation between GDP per capita and happiness levels by country. We speculated that countries with a higher GDPPC might be less happy reflecting longer work hours required to maintain such a high level of production. On the other hand, higher levels of GDP mirror higher standards of living and higher material wealth which could translate to life satisfaction. Overall, we found that countries with higher GDPPC tend to correlate with higher happiness levels than countries with lower GDPPC. It is possible that rather than hours worked, GDP reflects differences in technology, production processes, management, or human capital.
 
 
 ```{r}
