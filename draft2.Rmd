@@ -113,71 +113,11 @@ ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `
 
 Cat's graph(s):
 
-> We chose three variables that we think are important contributing factors to overall happiness, influenced of course by where we are and salient factors we feel attuned to. Our variables, life expectancy, sunshine hours, and hours worked, are compared against overall happiness for each place to see if there is a correlation between more or less of each variable. We are also keeping in mind intangible factors such as state of mind and the impacts of cultural attitudes. 
+> This graph simply presents reported happiness level against the average weekly hours worked.The data comes from a study on healthy lifestyle elements such as sunshine hours in each place, price of a bottle of water, and ________. Our marked interest in working hours out of all the factors in our initial dataset stems from what we witness each and every day in our lives, communities, and the nation at large. We wanted to see how hours worked We speculated that fewer weekly work hours would correlate to a greater happiness level, and the graph presents a loose trend that backs our speculations. The city with the fewest working hours (Copenhagen) reports a happiness level of 7.64. Though this is not the highest happiness level (that would be Helsinki), it is significantly higher than, say, Hong Kong where the work hours are around 41.7, on average paired, with a happiness level of 5.51. We recognize that there are cultural, political, and societal factors that could affect this rating. 
 
-```{r, r.height = 20, r.width = 15, fig.alt= "This dot plot compares the level of happiness to the sunshine hours in 43 different locations from the Healthy Lifestyle Cities Report 2021. The dots are all assigned a color based on location, and plotted at each discrete point. There appears to be no strong correlation between isolating the sunshine hours and comparing them to the happiness level. More factors combine to make up overall happiness."}
-healthy_lifestyle_data_cat <- healthy_data_dollars[-c(20),]
 
-healthy_lifestyle_data_cat2 <- healthy_lifestyle_data_cat %>% 
-  select(`City`, `Happiness levels(Country)`, `Sunshine hours(City)`) %>% 
-  
-  ggplot(aes(x = `Happiness levels(Country)`, 
-             y = factor(`Sunshine hours(City)`), 
-             color = (`City`))) +
-  geom_count() +
-  scale_y_discrete(breaks = c(1405, 1884, 2363, 2983, 3542))+
-  
-  labs(title = "Is there a correlation between sunshine hours and happiness levels?",
-       x = "Happiness Level",
-       y = "Sunshine Hours",
-       caption = "Graph By Cat Terres; data sourced from Kaggle, 
-       'Healthy Lifestyle Cities Report 2021'") +
-  
-  theme_foundation() +
-  theme(legend.title=element_blank())+
-  theme(legend.background = element_blank())
-```
-
-plotly for cities
 ```{r}
-ggplotly(healthy_lifestyle_data_cat2,
-         tooltip = c("text", 
-                     "x",
-                     "(City)"))
-```
 
-Life expectancy vs. Happiness (factor in city)
-Does happiness affect life expectancy?
-
-```{r, fig.alt= "For this graph, the cities have been placed into bins based on the happiness level and the range they fall into. For example, a country with a happiness level of 4.5 would be placed within the box plot above the 4-5 on the x axis. They are then plotted using upper and lower quartiles to show the distribution of life expectancies."}
-bin_size <- 1
-healthy_data_dollars %>% 
-  select("City" = `City`, "Happiness Level" = `Happiness levels(Country)`, "Life Expectancy" = `Life expectancy(years) (Country)`) %>% 
-  arrange(desc(`Life Expectancy`)) %>% 
- 
-  mutate(bin_dist = paste(as.character(as.integer(`Happiness Level`)),as.character(as.integer(`Happiness Level`+1)), sep = "-")) %>%  
-  ggplot() +
-  geom_boxplot(aes(x = factor(bin_dist), 
-         y = `Life Expectancy`,
-         outlier.color = NULL,
-         fill = bin_dist
-         )) +
-  labs(title = "Does reported greater happiness have a positive effect on life expectancy?",
-       x = "Happiness Level",
-       y = "Life Expectancy",
-       fill = "") +
-  
-  
-  guides(y = guide_axis(angle = 45))
-  
-  
-```
-
-Hours Worked vs. Happiness (factor in city)
-Is there a correlation between happiness and hours worked?
-
-
-```{r, fig.alt= "This graph displays various cities with their own color coded dot based on happiness level (x axis) and weekly hours worked (y axis). There is a loose correlation between greater happiness and fewer weeky work hours. The dots are able to be scrolled over with the cursor, displaying exact happiness level, exact work hours, and city."}
 healthy_data_dot <- healthy_data_2 [-c(23),]
 
 Healthy <- healthy_data_dot %>% 
@@ -210,7 +150,12 @@ ggplotly(Healthy,
          tooltip = c("text",
                      "y",
                      "x",
-                     "City"))
+                     "City")) %>% 
+  layout(title = list(text = paste0('Is there a correlation between weekly work hours and happiness levels?',
+                                    '<br>',
+                                    '<sup>',
+                                    'Graph by Cat Terres, data sourced from Kaggle ____ and _____',
+                                    '</sup>')))
 ```
 
 
@@ -253,3 +198,6 @@ ggplotly(GDPP_hours,
                      "x",
                      "City"))
 ```
+
+
+>Analysis: Can money buy happiness? Our key findings from this project are ______________. We sought to tell a story about the connection between economic prosperity and happiness but with the added factor of working hours. Money is inextricable from the work needed to obtain it, and to base our argument purely on GDP or how much money is possessed completely ignores a key factor: how much are people working to obtain said money. Thus, we tied the two together, factoring in that having more money likely ______ and working fewer hours means that people will _____________. This presents a paradox of sorts, more work generally means more money, and more money means more happiness, but less work also generates more happiness. So where is a harmonious balance found? We see that ________. Our research cannot possibly cover all factors such as access to community programs, optimal living conditions, or types of government and the length to which they go to provide resources. All of these ancillary factors play a role in happiness and the ability to work fewer hours, but we posit that looking purely at money and work can still produce illuminating discoveries. 
