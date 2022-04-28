@@ -73,7 +73,7 @@ healthy_data_2 <- healthy_data %>%
   mutate(water_bottle_cost = `Cost of a bottle of water(City)`*1.3,
          gym_cost = `Cost of a monthly gym membership(City)`*1.3)
 ```
-Here is a map of the cities included in the analysis. European cities are likely overrepresented because the data was compiled by a UK-based company.  
+Here is a map of the cities included in the analysis. European cities are over-represented because the data was compiled by a UK-based company.  
 ```{r}
 labels <- sprintf(
   "<strong>%s</strong><br/> %s",
@@ -165,18 +165,6 @@ ggplotly(Healthy,
 #GDPPC vs. Hours Worked (Can we observe a relationship between the GDPC of each contry and the average amount of hours people work per week?) Can the observable patterns tell us something about the contries with low GDPC and a higher number of working hours? How can we relate this to happiness?
 
 ```{r}
-country_GDP <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQL_6se7aBLQSP92RgP5DkvQ_quTyzsTxskf9ZFpvE_5ifMS5whQ1Lr0JRNMtd1ZGAaVXlEEMECPMHr/pub?output=csv", 
-    col_types = cols(GDPM = col_number(), 
-        GDP = col_number(), pop = col_number(), 
-        GDPPC = col_number()))
-
-
-healthy_data_2 <- healthy_data_dollars %>% 
-  left_join(country_GDP,
-            by = c("City" = "city"))
-
-options(scipen=999)
-
 GDPP_hours <- healthy_data_2 %>% 
 ggplot( aes(x = GDPPC, y = `Hours Worked`, color = `City`)) +
   geom_point() +
