@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)
+#knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)
 ```
 
 ```{r}
@@ -27,6 +27,8 @@ library(plotly)
 library(ggdark)
 library(maps)
 library(ggmap)
+library(leaflet)
+library(RColorBrewer)
 ```
 
 ## Introduction and Background
@@ -59,25 +61,40 @@ healthy_data <- read_csv("healthy_lifestyle_city_2021.csv",
         `Number of take out places(City)` = col_number(), 
         `Cost of a monthly gym membership(City)` = col_number()))
 
-#Converting to dollars
-healthy_data_dollars <- healthy_data %>% 
-  mutate(water_bottle_cost = `Cost of a bottle of water(City)`*1.3,
-         gym_cost = `Cost of a monthly gym membership(City)`*1.3)
-```
-
-> Because economic performance is a common standard for measuring the success of a given country, we chose to investigate if there is a correlation between gross domestic product (GDP), which is a measure of the total volume of goods and services produced within in country in a given year, and happiness levels as calculated by the **survey**. We used population data to calculate GDP per capita (thereafter, GDPPC) so as to control for differences in population between countries. We believe that GDPPC provides a helpful, though imperfect measure of the standard of living within a country. GDPPC operates with the assumption that every individual within a country gets an equal slice of the GDP pie, which is unrealistic, however, this is an assumption we will make for the purpose of this analysis. We see that countries with higher GDPPC tend to correlate with higher happiness levels than countries with lower GDPPC. We wondered if countries with a higher GDPPC would be more unhappy reflecting that they may work longer hours in order to have such a high level of production. It is possible that rather than hours worked, GDP reflects differences in technology, production processes, management, or human capital.    
-
-
-```{r}
 supplemental_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQL_6se7aBLQSP92RgP5DkvQ_quTyzsTxskf9ZFpvE_5ifMS5whQ1Lr0JRNMtd1ZGAaVXlEEMECPMHr/pub?output=csv", 
     col_types = cols(GDPM = col_number(), 
         GDP = col_number(), pop = col_number(), 
         GDPPC = col_number()))
 
-healthy_data_2 <- healthy_data_dollars %>% 
+#Joining data and converting pounds to dollars
+healthy_data_2 <- healthy_data %>% 
   left_join(supplemental_data,
-            by = c("City" = "city"))
+            by = c("City" = "city")) %>% 
+  mutate(water_bottle_cost = `Cost of a bottle of water(City)`*1.3,
+         gym_cost = `Cost of a monthly gym membership(City)`*1.3)
+```
+Here is a map of the cities included in the analysis. European cities are likely overrepresented because the data was compiled by a UK-based company.  
+```{r}
+labels <- sprintf(
+  "<strong>%s</strong><br/> %s",
+  healthy_data_2$City, healthy_data_2$country) %>%
+  lapply(htmltools::HTML)
 
+leaflet(data = healthy_data_2) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(
+    radius = 4,
+    color = "#D4A200",
+    stroke = FALSE, 
+    fillOpacity = 0.7,
+    label = ~labels
+  )
+```
+
+> Because economic performance is a common standard for measuring the success of a given country, we chose to investigate if there is a correlation between gross domestic product (GDP), which is a measure of the total volume of goods and services produced within in country in a given year, and happiness levels as calculated by the **survey**. We see that countries with higher GDPPC tend to correlate with higher happiness levels than countries with lower GDPPC. We wondered if countries with a higher GDPPC would be more unhappy reflecting that they may work longer hours in order to have such a high level of production. It is possible that rather than hours worked, GDP reflects differences in technology, production processes, management, or human capital.    
+
+
+```{r}
 options(scipen=999)
 
 ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `Happiness levels(Country)`)) +
@@ -89,25 +106,8 @@ ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `
        color = "Happiness Level 
        (1-10 scale)") +
   theme(plot.title = element_text(hjust = 1)) +
-  theme_classic() 
-```
-
-```{r}
-# Get the map information
-world <- get_stamenmap(
-    bbox = c(left = -180, bottom = -57, right = 179, top = 82.1), 
-    maptype = "toner-lite",
-    zoom = 2)
-
-# Plot the points on the map
-map <- ggmap(world) + # creates the map "background"
-  geom_point(data = healthy_data_2, 
-             aes(x = Longitude, y = Latitude), 
-             size = 0.5, color = "red") +
-  theme_map()
-
-ggplotly(map,
-         tooltip = c("text", "City"))
+  theme_classic() +
+  scale_color_gradient(high = "#FFD25A", low = "black")
 ```
 
 
