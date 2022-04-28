@@ -91,7 +91,40 @@ leaflet(data = healthy_data_2) %>%
   )
 ```
 
+
 > Because economic performance is a common standard for measuring the success of a given country, we chose to investigate if there is a correlation between gross domestic product (GDP), which is a measure of the total volume of goods and services produced within in country in a given year, and happiness levels as calculated by the **survey**. We see that countries with higher GDPPC tend to correlate with higher happiness levels than countries with lower GDPPC. We wondered if countries with a higher GDPPC would be more unhappy reflecting that they may work longer hours in order to have such a high level of production. It is possible that rather than hours worked, GDP reflects differences in technology, production processes, management, or human capital.    
+
+#GDPPC vs. Hours Worked
+```{r}
+GDPP_hours <- healthy_data_2 %>% 
+ggplot( aes(x = GDPPC, y = `Hours Worked`, color = `City`)) +
+  geom_point() +
+  labs(title = "Gross Domestic Product per Capita by Country and Average Weekly Hours Worked",
+       caption = "Data from: ADD LATER",
+       x = "GDP per capita (USD)",
+       y = "Hours Worked (Weekly)",
+       color = "") +
+  theme(legend.position = "none",
+        panel.background = element_rect(fill = "lightblue",
+                                colour = "gray",
+                                size = 0.5,
+                                ),
+        plot.title = element_text(size = 0.05))
+
+
+ggplotly(GDPP_hours,
+         tooltip = c("text", 
+                     "x",
+                     "City"))
+```
+
+This initial graph explores the relationship between GDP per capita and the average number of weekly hours worked in each city. It allows us to understand what these two factors tell us about the overall well-being of each city later in the study.
+The plot presents a predominantly inverse relationship between GDP per capita and the number of weekly hours worked. A cluster of cities is in the range of $0-$20K GDP per capita, and except for one city (Johannesburg), all can be classified as Latin American or Asian. We can infer that this relationship may describe different production systems and processes in each country. A lower GDP and higher number of hours worked likely points to a lack of access to technological resources or poor organizational management which makes it difficult to increase the standard of living. Countries with higher levels of technology can produce the same output as a country with lower levels of technology with much fewer inputs of labor or machinery hours.
+The second observable cluster on this plot is within the bounds of $40K-$60K GDP per capita, with a range of 12.2 between the lowest and highest number of weekly working hours. However, most points in the 30-35 weekly working hour range correspond to European cities, which follow the trend of higher GDP per capita and lower working hours. In contrast to our previous analyses, the increased GDP may represent more efficiency of labor, which can sustain the economy with fewer working hours and thus, promote a higher standard of living. 
+
+
+> We chose to investigate if there is a correlation between GDP per capita and happiness levels by country. We speculated that countries with a higher GDPPC might be less happy reflecting longer work hours required to maintain such a high level of production. On the other hand, higher levels of GDP mirror higher standards of living and higher material wealth which could translate to life satisfaction. Overall, we found that countries with higher GDPPC tend to correlate with higher happiness levels than countries with lower GDPPC. It is possible that rather than hours worked, GDP reflects differences in technology, production processes, management, or human capital.
+
 
 
 ```{r}
@@ -111,20 +144,20 @@ ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `
 ```
 
 
-Cat's graph(s):
+> “I think that this is ultimately why we want money: It's to create a world that you prefer." -Hank Green 
 
-> This graph simply presents reported happiness level against the average weekly hours worked.The data comes from a study on healthy lifestyle elements such as sunshine hours in each place, price of a bottle of water, and ________. Our marked interest in working hours out of all the factors in our initial dataset stems from what we witness each and every day in our lives, communities, and the nation at large. We speculated that fewer weekly work hours would correlate to a greater happiness level, and the graph presents a loose trend that backs our speculations. The city with the fewest working hours (Copenhagen) reports a happiness level of 7.64. Though this is not the highest happiness level (that would be Helsinki), it is significantly higher than, say, Hong Kong where the work hours are around 41.7, on average paired, with a happiness level of 5.51. We recognize that there are cultural, political, and societal factors that could affect this rating. 
+> This graph simply presents reported happiness level against the average weekly hours worked. Our marked interest in working hours out of all the factors in our initial dataset stems from what we witness each and every day in our lives, communities, and the nation at large. It is easy to assume that those who work less have more time for leisure activities and maintenance of their well-being, and in turn we speculated that fewer weekly work hours would correlate to a greater happiness level. However, this graph does not present a strong enough trend to support our hypothesis. There is a loose trend, and this can help to give direction to our investigation despite not proving anything for a fact. What we DO learn from this graph is the complexity of happiness as a variable. Happiness is not only contingent on working hours, but factors such as higher average wages, government investment in citizens and their communities, and access to community resources. We recognize that there are cultural, political, and societal nuances that influence whether people work more or less and that different places have different attitudes surrounding work and money. 
 
 
-```{r}
+
+
+```{r, fig.width=5, }
 
 healthy_data_dot <- healthy_data_2 [-c(23),]
 
 Healthy <- healthy_data_dot %>% 
   select(`City`, "Happiness Level" = `Happiness levels(Country)`, "Average Weekly Hours Worked" = `Hours Worked`) %>% 
   mutate(`Avg. Weekly Hours Worked` = factor(`Average Weekly Hours Worked`)) %>% 
-  
-  #mutate(bin_dist = paste(as.character(as.integer(`Happiness Level`)),as.character(as.integer(`Happiness Level`+1)), sep = "-")) %>% 
   
  ggplot(aes(x = `Happiness Level`, 
              y = `Avg. Weekly Hours Worked`, 
@@ -141,11 +174,10 @@ Healthy <- healthy_data_dot %>%
   
   theme_foundation() +
   theme(legend.title=element_blank())+
-  theme(legend.background = element_blank()) 
+  theme(legend.background = element_blank()) +
+  theme(legend.position = "none")
   
-```
 
-```{r}
 ggplotly(Healthy,
          tooltip = c("text",
                      "y",
@@ -154,13 +186,9 @@ ggplotly(Healthy,
   layout(title = list(text = paste0('Is there a correlation between weekly work hours and happiness levels?',
                                     '<br>',
                                     '<sup>',
-                                    'Graph by Cat Terres, data sourced from Kaggle ____ and _____',
+                                    'Graph by Cat Terres, data sourced from Kaggle and World Population Review',
                                     '</sup>')))
 ```
-
-
-
-
 
 #GDPPC vs. Hours Worked (Can we observe a relationship between the GDPC of each contry and the average amount of hours people work per week?) Can the observable patterns tell us something about the contries with low GDPC and a higher number of working hours? How can we relate this to happiness?
 
@@ -198,6 +226,7 @@ ggplotly(GDPP_hours,
                      "x",
                      "City"))
 ```
+
 
 
 >Analysis: Can money buy happiness? Our key findings from this project are ______________. We sought to tell a story about the connection between economic prosperity and happiness but with the added factor of working hours. Money is inextricable from the work needed to obtain it, and to base our argument purely on GDP or how much money is possessed completely ignores a key factor: how much are people working to obtain said money. Thus, we tied the two together, factoring in that having more money likely ______ and working fewer hours means that people will _____________. This presents a paradox of sorts, more work generally means more money, and more money means more happiness, but less work also generates more happiness. So where is a harmonious balance found? We see that ________. Our research cannot possibly cover all factors such as access to community programs, optimal living conditions, or types of government and the length to which they go to provide resources. All of these ancillary factors play a role in happiness and the ability to work fewer hours, but we posit that looking purely at money and work can still produce illuminating discoveries. 
