@@ -1,0 +1,193 @@
+---
+title: 'Can money buy happiness?'
+author: "Jocelyn Radke, Ana Espeleta, Cat Terres"
+output: 
+  html_document:
+    keep_md: TRUE
+    toc: TRUE
+    toc_float: TRUE
+    df_print: paged
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)
+```
+
+```{r}
+#Loading the packages
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(gridExtra)
+library(tidyverse)
+library(lubridate) 
+library(ggthemes)
+library(plotly)
+library(ggdark)
+library(maps)
+library(ggmap)
+library(leaflet)
+library(RColorBrewer)
+```
+
+## Introduction and Background
+
+Can money buy happiness? Philosophers, university students, and lay people alike have grappled with this question for ages. The knee-jerk reaction is to emphatically reject a link between life satisfaction and financial abundance because everyone knows both miserable wealthy people and others who appear incredibly joyful despite severe financial difficulties. As one rapper (The Notorious B.I.G.) insightfully observed that, “Mo Money Mo Problems,” which illustrates that affluence prompts challenges of its own. Some researchers have turned to empirical testing to seek an answer to this question. One study by [Jachimowicz](https://www.hbs.edu/ris/Publication%20Files/FinancialScarcity_SPPS_accepted_November1_2021_06f87dd3-4474-4c92-88d1-a5c6b63a2eaa.pdf) and colleagues found that financial instability correlates with higher levels of daily distress. Although money alone doesn’t imply happiness, money can eliminate daily hardships that lead to life dissatisfaction. A 2010 [Princeton](https://spia.princeton.edu/sites/default/files/content/docs/news/Happiness_Money_Summary.pdf) study measured that a $75,000 annual income was the “sweet spot” for maximizing emotional well-being. Incomes below this benchmark were correlated with lower levels of happiness and higher levels of stress. These research studies and our own analysis seek to make a connection between standards of living (a quantitative measure) and quality of life (a qualitative measure). A standard of living measures the material well-being of people in a given geographical population which is reflected in factors such as comfort, access to opportunities, goods, healthcare services, and safety. Quality of life, on the other hand, is a more subjective term that reflects the level of happiness of a population, which certainly varies person to person.
+
+> “Wealth consists not in having great possessions, but in having few wants.” – Epictetus, stoic philosopher
+
+Economic performance is a common determinate of standard of living within a country. The reasoning goes that a country that functions well economically is able to provide stable income and access to jobs, increase the availability of goods and services, and afford a social safety net. The most common measure of standard of living is gross domestic product (GDP), which is a measure of the total volume of goods and services produced within in country in a given year. We paired GDP data with population data to calculate GDP per capita (thereafter, GDPPC) so as to control for differences in population between countries. We believe that GDPPC provides a helpful, though imperfect measure of the standard of living within a country. GDPPC operates with the assumption that every individual within a country gets an equal slice of the GDP pie, which is unrealistic because of widespread income inequality, however, can provide insight as long as we are mindful of its limitations. In what follows, we seek to challenge the assumption that the best countries are those that are most economically successful though looking at measures of quality of living in addition to standard of living. 
+
+## Data Collection
+- Healthy living report (main source)- [Healthy Lifestyle Cities Report 2021](https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021)
+- GDP info (supplementary source)- [GDP data source](https://worldpopulationreview.com/countries/countries-by-gdp)
+- Hours worked info (supplementary source)- [new hours worked data (Penn)](https://worldpopulationreview.com/country-rankings/average-work-week-by-country)
+
+## Analysis
+
+```{r}
+#Loading the data
+healthy_data <- read_csv("healthy_lifestyle_city_2021.csv", 
+    col_types = cols(Rank = col_number(), 
+        `Sunshine hours(City)` = col_number(), 
+        `Cost of a bottle of water(City)` = col_number(), 
+        `Obesity levels(Country)` = col_number(), 
+        `Life expectancy(years) (Country)` = col_number(), 
+        `Pollution(Index score) (City)` = col_number(), 
+        `Annual avg. hours worked` = col_number(), 
+        `Happiness levels(Country)` = col_number(), 
+        `Outdoor activities(City)` = col_number(),
+        `Number of take out places(City)` = col_number(), 
+        `Cost of a monthly gym membership(City)` = col_number()))
+
+supplemental_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQL_6se7aBLQSP92RgP5DkvQ_quTyzsTxskf9ZFpvE_5ifMS5whQ1Lr0JRNMtd1ZGAaVXlEEMECPMHr/pub?output=csv", 
+    col_types = cols(GDPM = col_number(), 
+        GDP = col_number(), pop = col_number(), 
+        GDPPC = col_number()))
+
+#Joining data and converting pounds to dollars
+healthy_data_2 <- healthy_data %>% 
+  left_join(supplemental_data,
+            by = c("City" = "city")) %>% 
+  mutate(water_bottle_cost = `Cost of a bottle of water(City)`*1.3,
+         gym_cost = `Cost of a monthly gym membership(City)`*1.3)
+```
+Here is a map of the cities included in the analysis. European cities are over-represented because the data was compiled by a UK-based company.  
+```{r}
+labels <- sprintf(
+  "<strong>%s</strong><br/> %s",
+  healthy_data_2$City, healthy_data_2$country) %>%
+  lapply(htmltools::HTML)
+
+leaflet(data = healthy_data_2) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(
+    radius = 4,
+    color = "#D4A200",
+    stroke = FALSE, 
+    fillOpacity = 0.7,
+    label = ~labels
+  )
+```
+
+#GDPPC vs. Hours Worked
+```{r}
+GDPP_hours <- healthy_data_2 %>% 
+ggplot( aes(x = GDPPC, y = `Hours Worked`, color = `City`)) +
+  geom_point() +
+  labs(title = "Gross Domestic Product per Capita by Country and Average Weekly Hours Worked",
+       caption = "Data from: ADD LATER",
+       x = "GDP per capita (USD)",
+       y = "Hours Worked (Weekly)",
+       color = "") +
+  theme(legend.position = "none",
+        panel.background = element_rect(fill = "lightblue",
+                                colour = "gray",
+                                size = 0.5,
+                                ),
+        plot.title = element_text(size = 0.05))
+
+
+ggplotly(GDPP_hours,
+         tooltip = c("text", 
+                     "x",
+                     "City"))
+```
+
+This initial graph explores the relationship between GDP per capita and the average number of weekly hours worked in each city. It allows us to understand what these two factors tell us about the overall well-being of each city later in the study.
+The plot presents a predominantly inverse relationship between GDP per capita and the number of weekly hours worked. A cluster of cities is in the range of $0-$20K GDP per capita, and except for one city (Johannesburg), all can be classified as Latin American or Asian. We can infer that this relationship may describe different production systems and processes in each country. A lower GDP and higher number of hours worked likely points to a lack of access to technological resources or poor organizational management which makes it difficult to increase the standard of living. Countries with higher levels of technology can produce the same output as a country with lower levels of technology with much fewer inputs of labor or machinery hours.
+The second observable cluster on this plot is within the bounds of $40K-$60K GDP per capita, with a range of 12.2 between the lowest and highest number of weekly working hours. However, most points in the 30-35 weekly working hour range correspond to European cities, which follow the trend of higher GDP per capita and lower working hours. In contrast to our previous analyses, the increased GDP may represent more efficiency of labor, which can sustain the economy with fewer working hours and thus, promote a higher standard of living. 
+
+
+> We chose to investigate if there is a correlation between GDP per capita and happiness levels by country. We speculated that countries with a higher GDPPC might be less happy reflecting longer work hours required to maintain such a high level of production. On the other hand, higher levels of GDP mirror higher standards of living and higher material wealth which could translate to life satisfaction. Overall, we found that countries with higher GDPPC tend to correlate with higher happiness levels than countries with lower GDPPC. It is possible that rather than hours worked, GDP reflects differences in technology, production processes, management, or human capital.
+
+
+```{r}
+options(scipen=999)
+
+ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `Happiness levels(Country)`)) +
+  geom_point() +
+  labs(title = "Gross Domestic Product per Capita by Country and Happiness Level",
+       caption = "Data from: ADD LATER",
+       x = "GDP per capita (USD)",
+       y = "",
+       color = "Happiness Level 
+       (1-10 scale)") +
+  theme(plot.title = element_text(hjust = 1)) +
+  theme_classic() +
+  scale_color_gradient(high = "#FFD25A", low = "black")
+```
+
+
+Cat's graph(s):
+
+> This graph simply presents reported happiness level against the average weekly hours worked.The data comes from a study on healthy lifestyle elements such as sunshine hours in each place, price of a bottle of water, and ________. Our marked interest in working hours out of all the factors in our initial dataset stems from what we witness each and every day in our lives, communities, and the nation at large. We wanted to see how hours worked We speculated that fewer weekly work hours would correlate to a greater happiness level, and the graph presents a loose trend that backs our speculations. The city with the fewest working hours (Copenhagen) reports a happiness level of 7.64. Though this is not the highest happiness level (that would be Helsinki), it is significantly higher than, say, Hong Kong where the work hours are around 41.7, on average paired, with a happiness level of 5.51. We recognize that there are cultural, political, and societal factors that could affect this rating. 
+
+
+```{r}
+
+healthy_data_dot <- healthy_data_2 [-c(23),]
+
+Healthy <- healthy_data_dot %>% 
+  select(`City`, "Happiness Level" = `Happiness levels(Country)`, "Average Weekly Hours Worked" = `Hours Worked`) %>% 
+  mutate(`Avg. Weekly Hours Worked` = factor(`Average Weekly Hours Worked`)) %>% 
+  
+  #mutate(bin_dist = paste(as.character(as.integer(`Happiness Level`)),as.character(as.integer(`Happiness Level`+1)), sep = "-")) %>% 
+  
+ ggplot(aes(x = `Happiness Level`, 
+             y = `Avg. Weekly Hours Worked`, 
+             color = `City`)) +
+  geom_point() +
+  scale_y_discrete(breaks = c(26.6, 30.6, 33.2, 38.8, 42.1))+
+  
+  labs(title = "Is there a correlation between weekly work hours and happiness levels?",
+       x = "Happiness Level",
+       y = "",
+       caption = "Graph By Cat Terres; data sourced from Kaggle, 
+       'Healthy Lifestyle Cities Report 2021'",
+       color = "") +
+  
+  theme_foundation() +
+  theme(legend.title=element_blank())+
+  theme(legend.background = element_blank()) 
+  
+```
+
+```{r}
+ggplotly(Healthy,
+         tooltip = c("text",
+                     "y",
+                     "x",
+                     "City")) %>% 
+  layout(title = list(text = paste0('Is there a correlation between weekly work hours and happiness levels?',
+                                    '<br>',
+                                    '<sup>',
+                                    'Graph by Cat Terres, data sourced from Kaggle ____ and _____',
+                                    '</sup>')))
+```
+
+
+
+
+>Analysis: Can money buy happiness? Our key findings from this project are ______________. We sought to tell a story about the connection between economic prosperity and happiness but with the added factor of working hours. Money is inextricable from the work needed to obtain it, and to base our argument purely on GDP or how much money is possessed completely ignores a key factor: how much are people working to obtain said money. Thus, we tied the two together, factoring in that having more money likely ______ and working fewer hours means that people will _____________. This presents a paradox of sorts, more work generally means more money, and more money means more happiness, but less work also generates more happiness. So where is a harmonious balance found? We see that ________. Our research cannot possibly cover all factors such as access to community programs, optimal living conditions, or types of government and the length to which they go to provide resources. All of these ancillary factors play a role in happiness and the ability to work fewer hours, but we posit that looking purely at money and work can still produce illuminating discoveries. 
