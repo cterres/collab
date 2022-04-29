@@ -126,7 +126,12 @@ ggplotly(GDPP_hours,
          tooltip = c("text", 
                      "x",
                      "y",
-                     "City")) 
+                     "City")) %>% 
+layout(title = list(text = paste0('Gross Domestic Product per Capita by Country and Average Weekly Hours Worked',
+                                    '<br>',
+                                    '<sup>',
+                                    'Data sourced from Kaggle and World Population Review',
+                                    '</sup>')))
 ```
 
 This initial graph explores the relationship between GDP per capita and the average number of weekly hours worked in each city. It allows us to understand what these two factors tell us about the overall well-being of each city later in the study.
