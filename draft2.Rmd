@@ -104,19 +104,19 @@ leaflet(data = healthy_data_2) %>%
 
 ```{r}
 GDPP_hours <- healthy_data_2 %>% 
-ggplot( aes(x = GDPPC, y = `Hours Worked`, color = `City`)) +
-  geom_point() +
+ggplot( aes(x = GDPPC, y = `Hours Worked`)) +
+  geom_point(color = "#3C1518") +
   labs(title = "Gross Domestic Product per Capita by Country and Average Weekly Hours Worked",
        caption = "Data from: ADD LATER",
        x = "GDP per capita (USD)",
        y = "Hours Worked (Weekly)",
        color = "") +
   theme(legend.position = "none",
-        panel.background = element_rect(fill = "lightblue",
+        panel.background = element_rect(fill = "#FFE5B4",
                                 colour = "gray",
                                 size = 0.5,
                                 ),
-        plot.title = element_text(size = 0.05))
+        plot.title = element_text(size = 0.05)) 
 
 
 ggplotly(GDPP_hours,
@@ -124,7 +124,7 @@ ggplotly(GDPP_hours,
          height = 430,
          tooltip = c("text", 
                      "x",
-                     "City"))
+                     "City")) 
 ```
 
 This initial graph explores the relationship between GDP per capita and the average number of weekly hours worked in each city. It allows us to understand what these two factors tell us about the overall well-being of each city later in the study.
@@ -165,7 +165,7 @@ Healthy <- healthy_data_dot %>%
   
  ggplot(aes(x = `Happiness Level`, 
              y = `Avg. Weekly Hours Worked`, 
-             color = `City`)) +
+             color = `Happiness Level`)) +
   geom_point() +
   scale_y_discrete(breaks = c(26.6, 30.6, 33.2, 38.8, 42.1))+
   
@@ -179,7 +179,8 @@ Healthy <- healthy_data_dot %>%
   theme_foundation() +
   theme(legend.title=element_blank())+
   theme(legend.background = element_blank()) +
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  scale_color_gradient(high = "#FFD25A", low = "black")
   
 
 ggplotly(Healthy,
@@ -201,4 +202,6 @@ This graph simply presents reported happiness level against the average weekly h
 
 
 
->Concluding Statements: Can money buy happiness? Our key findings from this project are ______________. We sought to tell a story about the connection between economic prosperity and happiness but with the added factor of working hours. Money is inextricable from the work needed to obtain it, and to base our argument purely on GDP or how much money is possessed completely ignores a key factor: how much are people working to obtain said money. Thus, we tied the two together, factoring in that having more money likely ______ and working fewer hours means that people will _____________. This presents a paradox of sorts, more work generally means more money, and more money means more happiness, but less work also generates more happiness. So where is a harmonious balance found? We see that ________. Our research cannot possibly cover all factors such as access to community programs, optimal living conditions, or types of government and the length to which they go to provide resources. All of these ancillary factors play a role in happiness and the ability to work fewer hours, but we posit that looking purely at money and work can still produce illuminating discoveries. 
+## Concluding Thoughts
+
+Can money buy happiness? Our key findings from this project are ______________. We sought to tell a story about the connection between economic prosperity and happiness but with the added factor of working hours. Money is inextricable from the work needed to obtain it, and to base our argument purely on GDP or how much money is possessed completely ignores a key factor: how much are people working to obtain said money. Thus, we tied the two together, factoring in that having more money likely ______ and working fewer hours means that people will _____________. This presents a paradox of sorts, more work generally means more money, and more money means more happiness, but less work also generates more happiness. So where is a harmonious balance found? We see that ________. Our research cannot possibly cover all factors such as access to community programs, optimal living conditions, or types of government and the length to which they go to provide resources. All of these ancillary factors play a role in happiness and the ability to work fewer hours, but we posit that looking purely at money and work can still produce illuminating discoveries. 
