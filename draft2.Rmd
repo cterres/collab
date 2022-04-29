@@ -44,6 +44,14 @@ Economic performance is a common determinate of standard of living within a coun
 - GDP info (supplementary source)- [GDP data source](https://worldpopulationreview.com/countries/countries-by-gdp)
 - Hours worked info (supplementary source)- [new hours worked data (Penn)](https://worldpopulationreview.com/country-rankings/average-work-week-by-country)
 
+The dataset used was imported from Kaggle.com in a csv file. It contains a total of 44 cities, which were selected and ranked by its creator (a U.K.-based company), using 10 different metrics. For our study, we decided to focus on two of the variables provided, Happiness Index by country and Hours Worked by city. Additionally, we created a new dataset with GDP per capita for each city and made some adjustments to the variables in the original dataset. The two were later joined into the final dataset, healthy_data_2. 
+
+
+**Happiness Index**
+
+The “Happiness Levels” variable was taken directly from a specific pillar of the Happy Planet Index, which was generated using survey data from the World Happiness Report. The index in our dataset, although reflective of the wellness levels of each country, does not encompass any other poll, leading us to assume the overall happiness of each city. The collection of survey data is described on the Happy Planet Index site and consists of asking people to rate their current life on a scale from 0-10. Their perception of the best possible life corresponds to a 10 on the scale, and their perception of the worst possible life to a 0. The final scores are computed using weighted averages by population and consider the scores from 1-2 years prior to increase the sample size and give more precise estimates. The poll gathers around 1,000 responses annually for each country.
+
+
 ## Analysis
 
 ```{r}
