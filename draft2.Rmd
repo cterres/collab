@@ -82,7 +82,7 @@ healthy_data_2 <- healthy_data %>%
 
 The following map shows the cities that were chosen in the analysis.
 
-```{r}
+```{r, fig.alt = "World map showing 44 cities used in the analysis"}
 labels <- sprintf(
   "<strong>%s</strong><br/> %s",
   healthy_data_2$City, healthy_data_2$country) %>%
@@ -104,7 +104,7 @@ leaflet(data = healthy_data_2) %>%
 
 ```{r}
 GDPP_hours <- healthy_data_2 %>% 
-ggplot( aes(x = GDPPC, y = `Hours Worked`)) +
+ggplot( aes(x = GDPPC, y = `Hours Worked`, fill = `City`)) +
   geom_point(color = "#3C1518") +
   labs(title = "Gross Domestic Product per Capita by Country and Average Weekly Hours Worked",
        caption = "Data from: ADD LATER",
@@ -124,6 +124,7 @@ ggplotly(GDPP_hours,
          height = 430,
          tooltip = c("text", 
                      "x",
+                     "y",
                      "City")) 
 ```
 
@@ -132,18 +133,18 @@ The plot presents a predominantly inverse relationship between GDP per capita an
 The second observable cluster on this plot is within the bounds of $40K-$60K GDP per capita, with a range of 12.2 between the lowest and highest number of weekly working hours. However, most points in the 30-35 weekly working hour range correspond to European cities, which follow the trend of higher GDP per capita and lower working hours. In contrast to our previous analyses, the increased GDP may represent more efficiency of labor, which can sustain the economy with fewer working hours and thus, promote a higher standard of living. 
 
 
-```{r}
+```{r, fig.alt = "Graph showing gross domestic product (GDP) per capita by country and happiness level. Country is mapped on the y-axis and GDP per capita is mapped on the y-axis. Switzerland, Ireland, and the United States had the highest GDP per capita and also had high reported happiness levels. Countries with higher GDP per capita tend to have higher happiness levels"}
 options(scipen=999)
 
 ggplot(healthy_data_2, aes(y = fct_reorder(country, GDPPC), x = GDPPC, color = `Happiness levels(Country)`)) +
   geom_point() +
-  labs(title = "Gross Domestic Product per Capita by Country and Happiness Level",
-       caption = "Data from: ADD LATER",
+  labs(title = "GDP per Capita by Country and Happiness Level",
+       caption = "Data from: Healthy Lifestyle Cities Report 2021, IMF World Economic Outlook",
        x = "GDP per capita (USD)",
        y = "",
        color = "Happiness Level 
        (1-10 scale)") +
-  theme(plot.title = element_text(hjust = 1)) +
+  theme(plot.title = element_text(hjust = 0)) +
   theme_classic() +
   scale_color_gradient(high = "#FFD25A", low = "black")
 ```
